@@ -8,58 +8,54 @@ const products = [
     id: "nfc",
     name: "Kartu NFC",
     price: 55000,
-    category: "DIGITAL CARD",
     description:
       "Kartu identitas digital yang memudahkan pertukaran informasi melalui teknologi NFC.",
     features: ["Teknologi NFC", "Praktis dan modern", "Desain personal"],
-    style: "nfc",
+    type: "NFC CARD",
   },
   {
     id: "sharp",
     name: "Kartu Art Carton Sharp",
     price: 60000,
-    category: "PRINTED CARD",
     description:
-      "Kartu bisnis dengan sudut tajam yang menghadirkan kesan tegas, rapi, dan profesional.",
+      "Kartu bisnis dengan sudut tajam yang memberikan kesan tegas dan profesional.",
     features: ["Bahan Art Carton", "Sudut Sharp", "QR Code", "Glossy / Doff"],
-    style: "sharp",
+    type: "PRINTED CARD",
   },
   {
     id: "rounded",
     name: "Kartu Art Carton Rounded",
     price: 70000,
-    category: "PRINTED CARD",
     description:
-      "Kartu bisnis dengan sudut rounded untuk tampilan yang modern dan elegan.",
+      "Kartu bisnis dengan sudut rounded untuk tampilan modern dan elegan.",
     features: ["Bahan Art Carton", "Sudut Rounded", "QR Code", "Glossy / Doff"],
-    style: "rounded",
+    type: "PRINTED CARD",
   },
   {
     id: "design",
     name: "Hanya Desain",
     price: 30000,
-    category: "DESIGN SERVICE",
     description:
       "Layanan pembuatan desain kartu sesuai kebutuhan dan karakter identitas bisnis.",
     features: ["Desain personal", "File digital", "Konsep sesuai kebutuhan"],
-    style: "design",
+    type: "DESIGN SERVICE",
   },
 ];
 
 const team = [
-  ["Direktur", "Masratu Siti Suaibah"],
-  ["Divisi Pemasaran", "Amartya Nadiva R"],
-  ["Divisi Pelayanan", "Saskia Althafunissa"],
-  ["Divisi Produk & Desain", "Kasih Afrillia"],
-  ["Divisi Keuangan", "Izul Alfi’al Arif D"],
+  { role: "Direktur", name: "Masratu Siti Suaibah" },
+  { role: "Divisi Pemasaran", name: "Amartya Nadiva R" },
+  { role: "Divisi Pelayanan", name: "Saskia Althafunissa" },
+  { role: "Divisi Produk & Desain", name: "Kasih Afrillia" },
+  { role: "Divisi Keuangan", name: "Izul Alfi’al Arif D" },
 ];
 
-const formatPrice = (price: number) =>
+const money = (value: number) =>
   new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
     maximumFractionDigits: 0,
-  }).format(price);
+  }).format(value);
 
 export default function Home() {
   const [selected, setSelected] = useState("nfc");
@@ -69,10 +65,10 @@ export default function Home() {
   const [notes, setNotes] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const currentProduct =
-    products.find((product) => product.id === selected) ?? products[0];
+  const product =
+    products.find((item) => item.id === selected) ?? products[0];
 
-  function handleOrder(event: FormEvent<HTMLFormElement>) {
+  function submitOrder(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const message = [
@@ -80,14 +76,14 @@ export default function Home() {
       "",
       `Nama: ${name}`,
       `Nomor WhatsApp: ${phone || "-"}`,
-      `Produk: ${currentProduct.name}`,
-      `Harga: ${formatPrice(currentProduct.price)}`,
+      `Produk: ${product.name}`,
+      `Harga: ${money(product.price)}`,
       selected === "sharp" || selected === "rounded"
         ? `Finishing: ${finish}`
         : "",
       `Catatan: ${notes || "-"}`,
       "",
-      "Mohon informasi lebih lanjut mengenai pemesanan. Terima kasih.",
+      "Mohon informasi lebih lanjut. Terima kasih.",
     ]
       .filter(Boolean)
       .join("\n");
@@ -100,7 +96,7 @@ export default function Home() {
   }
 
   return (
-    <main>
+    <main className="idqode-site">
       <div className="topbar">
         <div className="container topbar-inner">
           <span>YOUR IDENTITY GOES DIGITAL</span>
@@ -108,42 +104,33 @@ export default function Home() {
         </div>
       </div>
 
-      <header className="header">
+      <header className="site-header">
         <div className="container navbar">
-          <a href="#home" className="brand">
-            IDQODE<span>.</span>
-            <small>YOUR IDENTITY GOES DIGITAL</small>
+          <a className="brand" href="#home">
+            <span className="brand-name">IDQODE<span>.</span></span>
+            <span className="brand-caption">YOUR IDENTITY GOES DIGITAL</span>
           </a>
 
           <button
-            className="menu-button"
+            className="menu-toggle"
+            type="button"
             onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle navigation"
+            aria-label="Buka navigasi"
             aria-expanded={menuOpen}
           >
             <span />
             <span />
           </button>
 
-          <nav className={menuOpen ? "nav-links active" : "nav-links"}>
-            {[
-              ["Beranda", "#home"],
-              ["Tentang", "#about"],
-              ["Produk", "#products"],
-              ["Proses", "#process"],
-              ["Tim", "#team"],
-            ].map(([label, link]) => (
-              <a
-                href={link}
-                key={link}
-                onClick={() => setMenuOpen(false)}
-              >
-                {label}
-              </a>
-            ))}
+          <nav className={menuOpen ? "nav-links open" : "nav-links"}>
+            <a href="#home" onClick={() => setMenuOpen(false)}>Beranda</a>
+            <a href="#about" onClick={() => setMenuOpen(false)}>Tentang</a>
+            <a href="#products" onClick={() => setMenuOpen(false)}>Produk</a>
+            <a href="#process" onClick={() => setMenuOpen(false)}>Proses</a>
+            <a href="#team" onClick={() => setMenuOpen(false)}>Tim</a>
             <a
               href="#order"
-              className="nav-button"
+              className="nav-cta"
               onClick={() => setMenuOpen(false)}
             >
               Mulai Pesanan <span>↗</span>
@@ -154,9 +141,9 @@ export default function Home() {
 
       <section className="hero" id="home">
         <div className="container hero-grid">
-          <div className="hero-content">
+          <div className="hero-copy">
             <div className="eyebrow">
-              <span />
+              <span className="eyebrow-line" />
               DIGITAL BUSINESS IDENTITY
             </div>
 
@@ -173,73 +160,65 @@ export default function Home() {
             </p>
 
             <div className="hero-actions">
-              <a href="#products" className="primary-button">
+              <a className="button-primary" href="#products">
                 Jelajahi Produk <span>↗</span>
               </a>
-              <a href="#about" className="secondary-link">
+              <a className="button-text" href="#about">
                 Kenali IDQODE <span>→</span>
               </a>
             </div>
 
             <div className="hero-note">
-              <span className="note-line" />
-              <span>Designed to represent your identity.</span>
+              <span />
+              Designed to represent your identity.
             </div>
           </div>
 
-          <div className="hero-art">
-            <div className="hero-glow" />
-            <div className="hero-orbit orbit-one" />
-            <div className="hero-orbit orbit-two" />
+          <div className="hero-visual" aria-label="Ilustrasi kartu bisnis digital">
+            <div className="visual-circle circle-a" />
+            <div className="visual-circle circle-b" />
 
-            <div className="showcase-card showcase-back">
-              <div className="showcase-top">
+            <div className="hero-card hero-card-back">
+              <div className="card-head">
                 <strong>IDQODE</strong>
                 <span>01 / 02</span>
               </div>
-              <div className="showcase-symbol">Q.</div>
-              <div className="showcase-bottom">
+              <div className="card-big-q">Q.</div>
+              <div className="card-foot">
                 <span>YOUR IDENTITY</span>
                 <span>GOES DIGITAL</span>
               </div>
             </div>
 
-            <div className="showcase-card showcase-front">
-              <div className="showcase-top">
+            <div className="hero-card hero-card-front">
+              <div className="card-head">
                 <strong>IDQODE</strong>
                 <span>NFC ENABLED</span>
               </div>
-              <div className="showcase-person">
+              <div className="card-person">
                 <small>DIGITAL BUSINESS CARD</small>
                 <h3>Alexandra<br />Morgan.</h3>
                 <span>Creative Director</span>
               </div>
-              <div className="showcase-bottom">
+              <div className="card-foot">
                 <span>SCAN OR TAP TO CONNECT</span>
                 <b>▦</b>
               </div>
             </div>
 
-            <div className="floating-label label-one">
-              <span>✦</span> SMART IDENTITY
-            </div>
-            <div className="floating-label label-two">
-              NFC + QR CODE <span>↗</span>
-            </div>
-            <div className="hero-art-caption">
-              A better way to introduce yourself.
-            </div>
+            <div className="float-label float-top">✦ SMART IDENTITY</div>
+            <div className="float-label float-bottom">NFC + QR CODE ↗</div>
           </div>
         </div>
 
-        <div className="container hero-footer">
+        <div className="container hero-bottom">
           <span>01 / DIGITAL IDENTITY</span>
           <span>DESIGN WITH PURPOSE</span>
           <span>EST. IDQODE</span>
         </div>
       </section>
 
-      <section className="about section" id="about">
+      <section className="section about-section" id="about">
         <div className="container about-grid">
           <div>
             <div className="section-label">01 — ABOUT IDQODE</div>
@@ -250,7 +229,7 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="about-description">
+          <div className="about-copy">
             <p>
               IDQODE merupakan layanan desain identitas bisnis digital yang
               membantu individu maupun pelaku usaha memperkenalkan diri
@@ -258,17 +237,17 @@ export default function Home() {
             </p>
             <p>
               Dengan menggabungkan desain visual, QR Code, dan teknologi NFC,
-              IDQODE menghadirkan solusi identitas yang tidak hanya menarik
-              secara visual, tetapi juga memudahkan pertukaran informasi.
+              IDQODE menghadirkan solusi identitas yang menarik secara visual
+              sekaligus memudahkan pertukaran informasi.
             </p>
-            <a href="#products" className="text-link">
+            <a className="inline-link" href="#products">
               Explore our products <span>↗</span>
             </a>
           </div>
         </div>
       </section>
 
-      <section className="products section" id="products">
+      <section className="section products-section" id="products">
         <div className="container">
           <div className="section-heading">
             <div>
@@ -286,61 +265,58 @@ export default function Home() {
           </div>
 
           <div className="product-grid">
-            {products.map((product, index) => (
-              <article className="product-card" key={product.id}>
-                <div className={`product-visual visual-${product.style}`}>
-                  <div className="visual-caption">
-                    <span>{product.category}</span>
+            {products.map((item, index) => (
+              <article className="product-card" key={item.id}>
+                <div className={`product-art art-${item.id}`}>
+                  <div className="art-top">
+                    <span>{item.type}</span>
                     <span>0{index + 1}</span>
                   </div>
 
-                  <div className={`mockup-card mockup-${product.style}`}>
-                    <div className="mockup-header">
+                  <div className={`sample-card sample-${item.id}`}>
+                    <div className="sample-head">
                       <strong>IDQODE</strong>
-                      <span>{product.id === "nfc" ? "NFC" : "CARD"}</span>
+                      <span>{item.id === "nfc" ? "NFC" : "CARD"}</span>
                     </div>
-
-                    {product.id === "design" ? (
-                      <div className="mockup-design">
+                    {item.id === "design" ? (
+                      <div className="sample-design">
                         <strong>Q.</strong>
-                        <span>DESIGN<br />YOUR IDENTITY</span>
+                        <span>DESIGN YOUR<br />IDENTITY</span>
                       </div>
                     ) : (
-                      <div className="mockup-person">
-                        <span>YOUR NAME</span>
+                      <div className="sample-person">
+                        <small>YOUR NAME</small>
                         <strong>Business Identity</strong>
                       </div>
                     )}
-
-                    <div className="mockup-footer">
+                    <div className="sample-foot">
                       <span>YOUR IDENTITY GOES DIGITAL</span>
-                      <b>{product.id === "nfc" ? "⌁" : "▦"}</b>
+                      <b>{item.id === "nfc" ? "⌁" : "▦"}</b>
                     </div>
                   </div>
-
-                  <div className="visual-decoration" />
                 </div>
 
-                <div className="product-content">
-                  <h3>{product.name}</h3>
-                  <p>{product.description}</p>
+                <div className="product-info">
+                  <h3>{item.name}</h3>
+                  <p>{item.description}</p>
 
-                  <ul>
-                    {product.features.map((feature) => (
+                  <ul className="feature-list">
+                    {item.features.map((feature) => (
                       <li key={feature}>
                         <span>✓</span> {feature}
                       </li>
                     ))}
                   </ul>
 
-                  <div className="product-bottom">
+                  <div className="product-price-row">
                     <div>
                       <small>Harga produk</small>
-                      <strong>{formatPrice(product.price)}</strong>
+                      <strong>{money(item.price)}</strong>
                     </div>
                     <button
+                      type="button"
                       onClick={() => {
-                        setSelected(product.id);
+                        setSelected(item.id);
                         document.getElementById("order")?.scrollIntoView({
                           behavior: "smooth",
                         });
@@ -354,29 +330,29 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="product-disclaimer">
-            Harga produk tercantum sesuai pilihan. Detail desain dan kebutuhan
+          <p className="product-note">
+            Harga tercantum sesuai pilihan produk. Detail desain dan kebutuhan
             pemesanan akan dikonfirmasi melalui WhatsApp.
-          </div>
+          </p>
         </div>
       </section>
 
-      <section className="technology section">
+      <section className="section technology-section">
         <div className="container technology-grid">
-          <div className="technology-art">
-            <div className="technology-circle circle-one" />
-            <div className="technology-circle circle-two" />
-            <div className="technology-card">
+          <div className="technology-visual">
+            <div className="tech-ring ring-one" />
+            <div className="tech-ring ring-two" />
+            <div className="tech-card">
               <span>THE DIGITAL EXPERIENCE</span>
-              <div className="technology-qr">▦</div>
+              <div className="tech-code">▦</div>
               <h3>Connect<br />without limits.</h3>
-              <div className="technology-divider" />
+              <div className="tech-rule" />
               <small>IDQODE DIGITAL CARD</small>
             </div>
-            <div className="technology-badge">QR CODE + NFC ✦</div>
+            <div className="tech-badge">QR CODE + NFC ✦</div>
           </div>
 
-          <div className="technology-content">
+          <div className="technology-copy">
             <div className="section-label">03 — THE ADVANTAGE</div>
             <h2>
               Technology that
@@ -385,7 +361,7 @@ export default function Home() {
             </h2>
 
             <div className="advantage-list">
-              <div className="advantage-item">
+              <article className="advantage-item">
                 <span>01</span>
                 <div>
                   <h3>QR Code Accessibility</h3>
@@ -394,9 +370,9 @@ export default function Home() {
                     menggunakan kamera perangkat.
                   </p>
                 </div>
-              </div>
+              </article>
 
-              <div className="advantage-item">
+              <article className="advantage-item">
                 <span>02</span>
                 <div>
                   <h3>NFC Technology</h3>
@@ -405,9 +381,9 @@ export default function Home() {
                     kartu ke perangkat yang mendukung NFC.
                   </p>
                 </div>
-              </div>
+              </article>
 
-              <div className="advantage-item">
+              <article className="advantage-item">
                 <span>03</span>
                 <div>
                   <h3>Personalized Design</h3>
@@ -416,13 +392,13 @@ export default function Home() {
                     identitas bisnis masing-masing pelanggan.
                   </p>
                 </div>
-              </div>
+              </article>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="process section" id="process">
+      <section className="section process-section" id="process">
         <div className="container">
           <div className="section-heading">
             <div>
@@ -434,8 +410,8 @@ export default function Home() {
               </h2>
             </div>
             <p>
-              Kami menghadirkan proses pemesanan yang terstruktur agar setiap
-              kebutuhan pelanggan dapat dikomunikasikan dengan jelas.
+              Proses pemesanan yang terstruktur agar setiap kebutuhan
+              pelanggan dapat dikomunikasikan dengan jelas.
             </p>
           </div>
 
@@ -446,18 +422,18 @@ export default function Home() {
               ["03", "Proses Desain", "Tim menyiapkan desain dan melakukan konfirmasi."],
               ["04", "Penyelesaian", "Pesanan dilanjutkan setelah detail disetujui."],
             ].map(([number, title, description]) => (
-              <div className="process-card" key={number}>
-                <span>{number}</span>
+              <article className="process-card" key={number}>
+                <span className="process-number">{number}</span>
                 <div className="process-line" />
                 <h3>{title}</h3>
                 <p>{description}</p>
-              </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="order section" id="order">
+      <section className="section order-section" id="order">
         <div className="container order-grid">
           <div className="order-intro">
             <div className="section-label">05 — LET'S GET STARTED</div>
@@ -468,10 +444,9 @@ export default function Home() {
             </h2>
             <p>
               Punya kebutuhan desain atau ingin memesan kartu IDQODE?
-              Sampaikan detail pesananmu melalui formulir berikut.
+              Sampaikan detail pesanan melalui formulir berikut.
             </p>
-
-            <div className="contact-detail">
+            <div className="contact-highlight">
               <span>↗</span>
               <div>
                 <small>WHATSAPP IDQODE</small>
@@ -480,47 +455,47 @@ export default function Home() {
             </div>
           </div>
 
-          <form className="order-form" onSubmit={handleOrder}>
+          <form className="order-form" onSubmit={submitOrder}>
             <div className="form-heading">
               <strong>ORDER REQUEST</strong>
               <span>IDQODE / 001</span>
             </div>
 
-            <label htmlFor="name">Nama lengkap</label>
+            <label htmlFor="customer-name">Nama lengkap</label>
             <input
-              id="name"
+              id="customer-name"
               value={name}
               onChange={(event) => setName(event.target.value)}
               placeholder="Masukkan nama lengkap"
               required
             />
 
-            <label htmlFor="phone">Nomor WhatsApp</label>
+            <label htmlFor="customer-phone">Nomor WhatsApp</label>
             <input
-              id="phone"
+              id="customer-phone"
               value={phone}
               onChange={(event) => setPhone(event.target.value)}
               placeholder="08xxxxxxxxxx"
             />
 
-            <label htmlFor="product">Pilihan produk</label>
+            <label htmlFor="product-choice">Pilihan produk</label>
             <select
-              id="product"
+              id="product-choice"
               value={selected}
               onChange={(event) => setSelected(event.target.value)}
             >
-              {products.map((product) => (
-                <option key={product.id} value={product.id}>
-                  {product.name} — {formatPrice(product.price)}
+              {products.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name} — {money(item.price)}
                 </option>
               ))}
             </select>
 
             {(selected === "sharp" || selected === "rounded") && (
               <>
-                <label htmlFor="finish">Finishing</label>
+                <label htmlFor="finish-choice">Finishing</label>
                 <select
-                  id="finish"
+                  id="finish-choice"
                   value={finish}
                   onChange={(event) => setFinish(event.target.value)}
                 >
@@ -530,11 +505,11 @@ export default function Home() {
               </>
             )}
 
-            <label htmlFor="notes">
+            <label htmlFor="customer-notes">
               Catatan tambahan <span>(opsional)</span>
             </label>
             <textarea
-              id="notes"
+              id="customer-notes"
               rows={3}
               value={notes}
               onChange={(event) => setNotes(event.target.value)}
@@ -543,7 +518,7 @@ export default function Home() {
 
             <div className="total-price">
               <span>Estimasi harga produk</span>
-              <strong>{formatPrice(currentProduct.price)}</strong>
+              <strong>{money(product.price)}</strong>
             </div>
 
             <button className="submit-button" type="submit">
@@ -557,7 +532,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="team section" id="team">
+      <section className="section team-section" id="team">
         <div className="container">
           <div className="section-heading">
             <div>
@@ -575,25 +550,25 @@ export default function Home() {
           </div>
 
           <div className="team-grid">
-            {team.map(([role, member], index) => (
-              <article className="team-card" key={role}>
-                <div className="team-number">0{index + 1}</div>
-                <div className="team-initial">
-                  {member
+            {team.map((member, index) => (
+              <article className="team-card" key={member.role}>
+                <span className="team-number">0{index + 1}</span>
+                <div className="team-avatar">
+                  {member.name
                     .split(" ")
                     .slice(0, 2)
                     .map((part) => part[0])
                     .join("")}
                 </div>
-                <div className="team-role">{role}</div>
-                <h3>{member}</h3>
+                <span className="team-role">{member.role}</span>
+                <h3>{member.name}</h3>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="closing">
+      <section className="closing-section">
         <div className="container closing-inner">
           <div>
             <div className="section-label">YOUR IDENTITY GOES DIGITAL</div>
@@ -614,15 +589,16 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="footer">
+      <footer className="site-footer">
         <div className="container footer-grid">
           <div className="footer-brand">
-            <a href="#home" className="brand footer-logo">
-              IDQODE<span>.</span>
+            <a href="#home" className="brand">
+              <span className="brand-name">IDQODE<span>.</span></span>
+              <span className="brand-caption">YOUR IDENTITY GOES DIGITAL</span>
             </a>
             <p>
-              Your identity goes digital. Solusi identitas bisnis melalui
-              desain, QR Code, dan teknologi NFC.
+              Solusi identitas bisnis melalui desain, QR Code, dan
+              teknologi NFC.
             </p>
           </div>
 
@@ -641,7 +617,7 @@ export default function Home() {
             <a href="https://instagram.com/idqode" target="_blank" rel="noreferrer">Instagram</a>
           </div>
 
-          <div className="footer-column footer-location">
+          <div className="footer-column">
             <strong>Our Location</strong>
             <p>
               Pademangan Timur, Kecamatan Pademangan, Jakarta Utara,
