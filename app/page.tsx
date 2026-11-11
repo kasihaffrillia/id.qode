@@ -3,186 +3,97 @@
 
 import { useState, type FormEvent } from "react";
 
-const WHATSAPP_NUMBER = "6285762569023";
-
 const products = [
   {
     id: "nfc",
-    number: "01",
     name: "Kartu NFC",
-    category: "Digital Card",
-    price: "Rp55.000",
+    price: 55000,
+    category: "DIGITAL CARD",
     description:
-      "Kartu nama modern dengan teknologi NFC untuk membagikan informasi kontak secara praktis.",
-    features: ["Teknologi NFC", "Praktis dan modern", "Identitas digital"],
-    label: "Digital Experience",
+      "Kartu identitas digital yang memudahkan pertukaran informasi melalui teknologi NFC.",
+    features: ["Teknologi NFC", "Praktis dan modern", "Desain personal"],
+    style: "nfc",
   },
   {
     id: "sharp",
-    number: "02",
-    name: "Art Carton Sharp",
-    category: "Printed Card",
-    price: "Rp60.000",
+    name: "Kartu Art Carton Sharp",
+    price: 60000,
+    category: "PRINTED CARD",
     description:
-      "Kartu nama Art Carton dengan sudut tajam untuk tampilan yang rapi dan profesional.",
-    features: ["QR Code", "Sudut Sharp", "Glossy atau Doff"],
-    label: "Classic Form",
+      "Kartu bisnis dengan sudut tajam yang menghadirkan kesan tegas, rapi, dan profesional.",
+    features: ["Bahan Art Carton", "Sudut Sharp", "QR Code", "Glossy / Doff"],
+    style: "sharp",
   },
   {
     id: "rounded",
-    number: "03",
-    name: "Art Carton Rounded",
-    category: "Printed Card",
-    price: "Rp70.000",
+    name: "Kartu Art Carton Rounded",
+    price: 70000,
+    category: "PRINTED CARD",
     description:
-      "Kartu nama dengan sudut rounded yang memberikan kesan modern dan elegan.",
-    features: ["QR Code", "Sudut Rounded", "Glossy atau Doff"],
-    label: "Modern Form",
+      "Kartu bisnis dengan sudut rounded untuk tampilan yang modern dan elegan.",
+    features: ["Bahan Art Carton", "Sudut Rounded", "QR Code", "Glossy / Doff"],
+    style: "rounded",
   },
   {
     id: "design",
-    number: "04",
-    name: "Desain Saja",
-    category: "Design Service",
-    price: "Rp30.000",
+    name: "Hanya Desain",
+    price: 30000,
+    category: "DESIGN SERVICE",
     description:
-      "Layanan pembuatan desain kartu nama yang disesuaikan dengan identitas dan kebutuhan brand.",
-    features: ["Desain sesuai kebutuhan", "File digital", "Konsep personal"],
-    label: "Creative Service",
+      "Layanan pembuatan desain kartu sesuai kebutuhan dan karakter identitas bisnis.",
+    features: ["Desain personal", "File digital", "Konsep sesuai kebutuhan"],
+    style: "design",
   },
 ];
 
 const team = [
-  { name: "Masratu Siti Suaibah", role: "Direktur", number: "01" },
-  { name: "Amartya Nadiva R", role: "Divisi Pemasaran", number: "02" },
-  { name: "Saskia Althafunissa", role: "Divisi Pelayanan", number: "03" },
-  { name: "Kasih Afrillia", role: "Divisi Produk & Desain", number: "04" },
-  { name: "Izul Alfi'al Arif D", role: "Divisi Keuangan", number: "05" },
+  ["Direktur", "Masratu Siti Suaibah"],
+  ["Divisi Pemasaran", "Amartya Nadiva R"],
+  ["Divisi Pelayanan", "Saskia Althafunissa"],
+  ["Divisi Produk & Desain", "Kasih Afrillia"],
+  ["Divisi Keuangan", "Izul Alfi’al Arif D"],
 ];
 
-const faqs = [
-  {
-    question: "Apa itu kartu nama NFC?",
-    answer:
-      "Kartu NFC merupakan kartu nama yang menggunakan teknologi Near Field Communication. Informasi digital dapat dibagikan dengan mendekatkan kartu ke perangkat yang mendukung NFC.",
-  },
-  {
-    question: "Apa perbedaan kartu NFC dan Art Carton?",
-    answer:
-      "Kartu NFC menggunakan teknologi NFC untuk berbagi informasi secara digital. Sementara itu, kartu Art Carton menggunakan QR Code yang dapat dipindai melalui kamera ponsel.",
-  },
-  {
-    question: "Apakah bisa memesan desain saja?",
-    answer:
-      "Bisa. IDQODE menyediakan layanan desain saja dalam bentuk file digital dengan harga Rp30.000.",
-  },
-  {
-    question: "Apa pilihan finishing untuk Art Carton?",
-    answer:
-      "Kartu Art Carton tersedia dengan pilihan finishing Glossy dan Doff, serta bentuk Sharp dan Rounded.",
-  },
-];
-
-function ArrowIcon({ diagonal = false }: { diagonal?: boolean }) {
-  return (
-    <span aria-hidden="true" className="arrow-icon">
-      {diagonal ? "↗" : "→"}
-    </span>
-  );
-}
-
-function SectionLabel({ children }: { children: string }) {
-  return (
-    <div className="section-label">
-      <span />
-      {children}
-    </div>
-  );
-}
-
-function ProductVisual({ type }: { type: string }) {
-  return (
-    <div className={`product-visual product-visual-${type}`}>
-      <div className="visual-glow" />
-      <div className={`mock-card mock-card-${type}`}>
-        <div className="mock-card-top">
-          <span className="mock-brand">IDQODE</span>
-          <span className="mock-mark">✳</span>
-        </div>
-        {type === "nfc" ? (
-          <>
-            <div className="mock-nfc-symbol">)))</div>
-            <div className="mock-card-bottom">
-              <span>YOUR IDENTITY</span>
-              <span className="mock-card-number">01 / NFC</span>
-            </div>
-          </>
-        ) : type === "design" ? (
-          <>
-            <div className="mock-design-lines">
-              <span />
-              <span />
-              <span />
-            </div>
-            <div className="mock-card-bottom">
-              <span>CREATIVE IDENTITY</span>
-              <span className="mock-card-number">DESIGN</span>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="mock-profile">
-              <span className="mock-profile-dot">ID</span>
-              <div>
-                <strong>YOUR NAME</strong>
-                <small>Creative Professional</small>
-              </div>
-            </div>
-            <div className="mock-qr">
-              <span>▦</span>
-            </div>
-            <div className="mock-card-bottom">
-              <span>SCAN TO CONNECT</span>
-              <span className="mock-card-number">QODE</span>
-            </div>
-          </>
-        )}
-      </div>
-      <span className="visual-caption">IDQODE / {type.toUpperCase()}</span>
-    </div>
-  );
-}
+const formatPrice = (price: number) =>
+  new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(price);
 
 export default function Home() {
+  const [selected, setSelected] = useState("nfc");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [finish, setFinish] = useState("Glossy");
+  const [notes, setNotes] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeFaq, setActiveFaq] = useState<number | null>(0);
-  const [selectedProduct, setSelectedProduct] = useState("Kartu NFC");
-  const [shape, setShape] = useState("Sharp");
-  const [finishing, setFinishing] = useState("Glossy");
-  const [customerName, setCustomerName] = useState("");
-  const [customerMessage, setCustomerMessage] = useState("");
+
+  const currentProduct =
+    products.find((product) => product.id === selected) ?? products[0];
 
   function handleOrder(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const detail =
-      selectedProduct.includes("Art Carton")
-        ? `Bentuk: ${shape}\nFinishing: ${finishing}`
-        : "";
-
     const message = [
       "Halo IDQODE, saya ingin melakukan pemesanan.",
       "",
-      `Nama: ${customerName}`,
-      `Produk: ${selectedProduct}`,
-      detail,
-      `Pesan: ${customerMessage || "Saya ingin bertanya lebih lanjut."}`,
+      `Nama: ${name}`,
+      `Nomor WhatsApp: ${phone || "-"}`,
+      `Produk: ${currentProduct.name}`,
+      `Harga: ${formatPrice(currentProduct.price)}`,
+      selected === "sharp" || selected === "rounded"
+        ? `Finishing: ${finish}`
+        : "",
+      `Catatan: ${notes || "-"}`,
+      "",
+      "Mohon informasi lebih lanjut mengenai pemesanan. Terima kasih.",
     ]
       .filter(Boolean)
       .join("\n");
 
     window.open(
-      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
+      `https://wa.me/6285762569023?text=${encodeURIComponent(message)}`,
       "_blank",
       "noopener,noreferrer"
     );
@@ -190,594 +101,558 @@ export default function Home() {
 
   return (
     <main>
-      <header className="site-header">
-        <div className="nav-container">
-          <a href="#home" className="brand" aria-label="IDQODE Beranda">
-            <img src="/logo-idqode.png" alt="Logo IDQODE" />
+      <div className="topbar">
+        <div className="container topbar-inner">
+          <span>YOUR IDENTITY GOES DIGITAL</span>
+          <span>DESIGN · QR CODE · NFC TECHNOLOGY</span>
+        </div>
+      </div>
+
+      <header className="header">
+        <div className="container navbar">
+          <a href="#home" className="brand">
+            IDQODE<span>.</span>
+            <small>YOUR IDENTITY GOES DIGITAL</small>
           </a>
 
           <button
-            className="menu-toggle"
+            className="menu-button"
             onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Buka menu navigasi"
+            aria-label="Toggle navigation"
             aria-expanded={menuOpen}
           >
             <span />
             <span />
           </button>
 
-          <nav className={`nav-links ${menuOpen ? "nav-open" : ""}`}>
+          <nav className={menuOpen ? "nav-links active" : "nav-links"}>
             {[
               ["Beranda", "#home"],
               ["Tentang", "#about"],
               ["Produk", "#products"],
-              ["Layanan", "#services"],
-              ["Tim Kami", "#team"],
-            ].map(([label, href]) => (
-              <a key={href} href={href} onClick={() => setMenuOpen(false)}>
+              ["Proses", "#process"],
+              ["Tim", "#team"],
+            ].map(([label, link]) => (
+              <a
+                href={link}
+                key={link}
+                onClick={() => setMenuOpen(false)}
+              >
                 {label}
               </a>
             ))}
             <a
-              className="nav-cta"
-              href={`https://wa.me/${WHATSAPP_NUMBER}`}
-              target="_blank"
-              rel="noreferrer"
+              href="#order"
+              className="nav-button"
+              onClick={() => setMenuOpen(false)}
             >
-              Hubungi Kami <ArrowIcon diagonal />
+              Mulai Pesanan <span>↗</span>
             </a>
           </nav>
         </div>
       </header>
 
       <section className="hero" id="home">
-        <div className="hero-grid" />
-        <div className="hero-container">
+        <div className="container hero-grid">
           <div className="hero-content">
-            <div className="hero-eyebrow">
-              <span className="status-dot" />
-              DIGITAL BUSINESS CARD & CREATIVE DESIGN
+            <div className="eyebrow">
+              <span />
+              DIGITAL BUSINESS IDENTITY
             </div>
 
             <h1>
-              Your identity,
+              Your identity.
               <br />
-              <span>redefined digitally.</span>
+              <span>Beyond ordinary.</span>
             </h1>
 
-            <p className="hero-description">
-              Wujudkan identitas profesional melalui kartu nama yang dirancang
-              dengan sentuhan kreatif dan teknologi digital.
+            <p>
+              Hadirkan identitas bisnis yang lebih modern, praktis, dan
+              profesional melalui desain kartu, QR Code, serta teknologi NFC
+              bersama IDQODE.
             </p>
 
             <div className="hero-actions">
-              <a className="button-primary" href="#products">
-                Jelajahi Produk <ArrowIcon />
+              <a href="#products" className="primary-button">
+                Jelajahi Produk <span>↗</span>
               </a>
-              <a className="button-secondary" href="#about">
-                Kenali IDQODE
+              <a href="#about" className="secondary-link">
+                Kenali IDQODE <span>→</span>
               </a>
             </div>
 
             <div className="hero-note">
-              <span className="hero-note-line" />
-              Design. Connect. Make an impression.
+              <span className="note-line" />
+              <span>Designed to represent your identity.</span>
             </div>
           </div>
 
           <div className="hero-art">
+            <div className="hero-glow" />
             <div className="hero-orbit orbit-one" />
             <div className="hero-orbit orbit-two" />
-            <div className="hero-blue-disc" />
-            <div className="hero-card hero-card-back">
-              <span>IDQODE</span>
-              <div className="hero-card-lines">
-                <i />
-                <i />
-                <i />
+
+            <div className="showcase-card showcase-back">
+              <div className="showcase-top">
+                <strong>IDQODE</strong>
+                <span>01 / 02</span>
+              </div>
+              <div className="showcase-symbol">Q.</div>
+              <div className="showcase-bottom">
+                <span>YOUR IDENTITY</span>
+                <span>GOES DIGITAL</span>
               </div>
             </div>
-            <div className="hero-card hero-card-front">
-              <div className="hero-card-brand">
-                <span className="hero-card-logo">IQ</span>
-                <span>IDQODE</span>
+
+            <div className="showcase-card showcase-front">
+              <div className="showcase-top">
+                <strong>IDQODE</strong>
+                <span>NFC ENABLED</span>
               </div>
-              <div className="hero-card-center">
-                <div className="hero-card-wave">)))</div>
-                <strong>YOUR IDENTITY</strong>
-                <small>GOES DIGITAL</small>
+              <div className="showcase-person">
+                <small>DIGITAL BUSINESS CARD</small>
+                <h3>Alexandra<br />Morgan.</h3>
+                <span>Creative Director</span>
               </div>
-              <div className="hero-card-footer">
-                <span>CONNECT DIFFERENTLY</span>
-                <span>01 — 2026</span>
+              <div className="showcase-bottom">
+                <span>SCAN OR TAP TO CONNECT</span>
+                <b>▦</b>
               </div>
             </div>
-            <div className="floating-tag tag-top">NFC TECHNOLOGY</div>
-            <div className="floating-tag tag-bottom">MADE FOR YOUR BRAND</div>
-            <div className="hero-index">01 / DIGITAL IDENTITY</div>
+
+            <div className="floating-label label-one">
+              <span>✦</span> SMART IDENTITY
+            </div>
+            <div className="floating-label label-two">
+              NFC + QR CODE <span>↗</span>
+            </div>
+            <div className="hero-art-caption">
+              A better way to introduce yourself.
+            </div>
           </div>
         </div>
-        <div className="hero-bottom">
-          <span>SCROLL TO EXPLORE</span>
-          <span className="scroll-line" />
-          <span>01 — 06</span>
+
+        <div className="container hero-footer">
+          <span>01 / DIGITAL IDENTITY</span>
+          <span>DESIGN WITH PURPOSE</span>
+          <span>EST. IDQODE</span>
         </div>
       </section>
 
-      <section className="intro-strip">
-        <div className="intro-strip-inner">
-          <span>IDENTITY</span>
-          <i>✳</i>
-          <span>CREATIVITY</span>
-          <i>✳</i>
-          <span>TECHNOLOGY</span>
-          <i>✳</i>
-          <span>CONNECTION</span>
-        </div>
-      </section>
-
-      <section className="about-section section-padding" id="about">
-        <div className="section-container about-grid">
-          <div className="about-heading">
-            <SectionLabel>01 — TENTANG IDQODE</SectionLabel>
+      <section className="about section" id="about">
+        <div className="container about-grid">
+          <div>
+            <div className="section-label">01 — ABOUT IDQODE</div>
             <h2>
-              Identitas yang
+              More than a card.
               <br />
-              <span>punya arti.</span>
+              <span>A digital impression.</span>
             </h2>
           </div>
 
-          <div className="about-copy">
-            <p className="about-lead">
-              Kami percaya bahwa kesan pertama dimulai dari bagaimana kamu
-              memperkenalkan diri.
+          <div className="about-description">
+            <p>
+              IDQODE merupakan layanan desain identitas bisnis digital yang
+              membantu individu maupun pelaku usaha memperkenalkan diri
+              melalui media yang lebih praktis dan modern.
             </p>
             <p>
-              IDQODE hadir sebagai penyedia layanan desain kartu nama dan
-              identitas digital yang menggabungkan kreativitas dengan
-              kemudahan teknologi. Kami membantu pelanggan menghadirkan
-              identitas yang lebih praktis, informatif, dan sesuai karakter
-              masing-masing.
+              Dengan menggabungkan desain visual, QR Code, dan teknologi NFC,
+              IDQODE menghadirkan solusi identitas yang tidak hanya menarik
+              secara visual, tetapi juga memudahkan pertukaran informasi.
             </p>
-            <a className="text-link" href="#services">
-              Kenali layanan kami <ArrowIcon diagonal />
+            <a href="#products" className="text-link">
+              Explore our products <span>↗</span>
             </a>
-          </div>
-        </div>
-
-        <div className="section-container about-bottom">
-          <div className="about-stat">
-            <strong>01</strong>
-            <span>Identitas yang personal</span>
-          </div>
-          <div className="about-stat">
-            <strong>02</strong>
-            <span>Desain yang terarah</span>
-          </div>
-          <div className="about-stat">
-            <strong>03</strong>
-            <span>Teknologi yang praktis</span>
           </div>
         </div>
       </section>
 
-      <section className="products-section section-padding" id="products">
-        <div className="section-container">
+      <section className="products section" id="products">
+        <div className="container">
           <div className="section-heading">
             <div>
-              <SectionLabel>02 — KATALOG PRODUK</SectionLabel>
+              <div className="section-label">02 — OUR PRODUCTS</div>
               <h2>
-                Temukan kartu
+                Designed for your
                 <br />
-                <span>yang mewakili kamu.</span>
+                <span>professional identity.</span>
               </h2>
             </div>
             <p>
-              Pilihan produk dan layanan yang dirancang untuk mendukung
-              kebutuhan identitas profesionalmu.
+              Temukan pilihan produk IDQODE yang dirancang untuk membantu
+              identitas bisnis tampil lebih menarik dan mudah dibagikan.
             </p>
           </div>
 
           <div className="product-grid">
-            {products.map((product) => (
+            {products.map((product, index) => (
               <article className="product-card" key={product.id}>
-                <ProductVisual type={product.id} />
-                <div className="product-info">
-                  <div className="product-meta">
+                <div className={`product-visual visual-${product.style}`}>
+                  <div className="visual-caption">
                     <span>{product.category}</span>
-                    <span>{product.number} / 04</span>
+                    <span>0{index + 1}</span>
                   </div>
+
+                  <div className={`mockup-card mockup-${product.style}`}>
+                    <div className="mockup-header">
+                      <strong>IDQODE</strong>
+                      <span>{product.id === "nfc" ? "NFC" : "CARD"}</span>
+                    </div>
+
+                    {product.id === "design" ? (
+                      <div className="mockup-design">
+                        <strong>Q.</strong>
+                        <span>DESIGN<br />YOUR IDENTITY</span>
+                      </div>
+                    ) : (
+                      <div className="mockup-person">
+                        <span>YOUR NAME</span>
+                        <strong>Business Identity</strong>
+                      </div>
+                    )}
+
+                    <div className="mockup-footer">
+                      <span>YOUR IDENTITY GOES DIGITAL</span>
+                      <b>{product.id === "nfc" ? "⌁" : "▦"}</b>
+                    </div>
+                  </div>
+
+                  <div className="visual-decoration" />
+                </div>
+
+                <div className="product-content">
                   <h3>{product.name}</h3>
                   <p>{product.description}</p>
-                  <div className="product-features">
+
+                  <ul>
                     {product.features.map((feature) => (
-                      <span key={feature}>{feature}</span>
+                      <li key={feature}>
+                        <span>✓</span> {feature}
+                      </li>
                     ))}
-                  </div>
-                  <div className="product-price-row">
+                  </ul>
+
+                  <div className="product-bottom">
                     <div>
-                      <small>Mulai dari</small>
-                      <strong>{product.price}</strong>
+                      <small>Harga produk</small>
+                      <strong>{formatPrice(product.price)}</strong>
                     </div>
-                    <a
-                      href="#order"
-                      className="product-order"
-                      onClick={() => setSelectedProduct(
-                        product.id === "sharp"
-                          ? "Art Carton Sharp"
-                          : product.id === "rounded"
-                            ? "Art Carton Rounded"
-                            : product.name
-                      )}
-                      aria-label={`Pesan ${product.name}`}
+                    <button
+                      onClick={() => {
+                        setSelected(product.id);
+                        document.getElementById("order")?.scrollIntoView({
+                          behavior: "smooth",
+                        });
+                      }}
                     >
-                      <ArrowIcon diagonal />
-                    </a>
+                      Pilih <span>↗</span>
+                    </button>
                   </div>
                 </div>
               </article>
             ))}
           </div>
-          <p className="price-note">
-            *Harga mengikuti pilihan produk yang tercantum. Hubungi kami untuk
-            informasi pemesanan lebih lanjut.
-          </p>
+
+          <div className="product-disclaimer">
+            Harga produk tercantum sesuai pilihan. Detail desain dan kebutuhan
+            pemesanan akan dikonfirmasi melalui WhatsApp.
+          </div>
         </div>
       </section>
 
-      <section className="technology-section section-padding" id="services">
-        <div className="section-container technology-grid">
-          <div className="technology-copy">
-            <SectionLabel>03 — LAYANAN KAMI</SectionLabel>
+      <section className="technology section">
+        <div className="container technology-grid">
+          <div className="technology-art">
+            <div className="technology-circle circle-one" />
+            <div className="technology-circle circle-two" />
+            <div className="technology-card">
+              <span>THE DIGITAL EXPERIENCE</span>
+              <div className="technology-qr">▦</div>
+              <h3>Connect<br />without limits.</h3>
+              <div className="technology-divider" />
+              <small>IDQODE DIGITAL CARD</small>
+            </div>
+            <div className="technology-badge">QR CODE + NFC ✦</div>
+          </div>
+
+          <div className="technology-content">
+            <div className="section-label">03 — THE ADVANTAGE</div>
             <h2>
-              Lebih dari
+              Technology that
               <br />
-              sekadar <span>kartu nama.</span>
+              <span>connects people.</span>
             </h2>
-            <p>
-              Kami memadukan proses desain dengan pilihan teknologi dan
-              material yang dapat disesuaikan dengan kebutuhan identitasmu.
-            </p>
-            <a href="#order" className="button-light">
-              Konsultasikan kebutuhanmu <ArrowIcon />
-            </a>
-          </div>
 
-          <div className="technology-list">
-            <article className="technology-item">
-              <span className="technology-number">01</span>
-              <div>
-                <h3>Teknologi NFC</h3>
-                <p>
-                  Membagikan informasi digital dengan mendekatkan kartu ke
-                  perangkat yang mendukung NFC.
-                </p>
+            <div className="advantage-list">
+              <div className="advantage-item">
+                <span>01</span>
+                <div>
+                  <h3>QR Code Accessibility</h3>
+                  <p>
+                    Informasi dapat diakses dengan memindai QR Code
+                    menggunakan kamera perangkat.
+                  </p>
+                </div>
               </div>
-              <span className="technology-symbol">⌁</span>
-            </article>
-            <article className="technology-item">
-              <span className="technology-number">02</span>
-              <div>
-                <h3>QR Code</h3>
-                <p>
-                  Memudahkan orang mengakses informasi melalui pemindaian QR
-                  Code menggunakan kamera ponsel.
-                </p>
+
+              <div className="advantage-item">
+                <span>02</span>
+                <div>
+                  <h3>NFC Technology</h3>
+                  <p>
+                    Membagikan informasi secara praktis dengan mendekatkan
+                    kartu ke perangkat yang mendukung NFC.
+                  </p>
+                </div>
               </div>
-              <span className="technology-symbol">▦</span>
-            </article>
-            <article className="technology-item">
-              <span className="technology-number">03</span>
-              <div>
-                <h3>Desain Personal</h3>
-                <p>
-                  Konsep desain yang disesuaikan dengan kebutuhan dan
-                  karakter identitas pelanggan.
-                </p>
+
+              <div className="advantage-item">
+                <span>03</span>
+                <div>
+                  <h3>Personalized Design</h3>
+                  <p>
+                    Desain disesuaikan dengan karakter dan kebutuhan
+                    identitas bisnis masing-masing pelanggan.
+                  </p>
+                </div>
               </div>
-              <span className="technology-symbol">✳</span>
-            </article>
-            <article className="technology-item">
-              <span className="technology-number">04</span>
-              <div>
-                <h3>Finishing Pilihan</h3>
-                <p>
-                  Pilihan finishing Glossy dan Doff untuk kartu Art Carton
-                  dengan bentuk Sharp maupun Rounded.
-                </p>
-              </div>
-              <span className="technology-symbol">◇</span>
-            </article>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="process-section section-padding">
-        <div className="section-container">
-          <div className="section-heading process-heading">
+      <section className="process section" id="process">
+        <div className="container">
+          <div className="section-heading">
             <div>
-              <SectionLabel>04 — PROSES PEMESANAN</SectionLabel>
+              <div className="section-label">04 — HOW IT WORKS</div>
               <h2>
-                Mudah dari
+                Simple process.
                 <br />
-                <span>awal hingga selesai.</span>
+                <span>Meaningful results.</span>
               </h2>
             </div>
             <p>
-              Kami membantu mengarahkan proses pemesanan agar kebutuhan
-              identitasmu dapat dikomunikasikan dengan jelas.
+              Kami menghadirkan proses pemesanan yang terstruktur agar setiap
+              kebutuhan pelanggan dapat dikomunikasikan dengan jelas.
             </p>
           </div>
 
           <div className="process-grid">
             {[
-              {
-                n: "01",
-                title: "Pilih Produk",
-                desc: "Tentukan jenis kartu atau layanan desain yang kamu butuhkan.",
-              },
-              {
-                n: "02",
-                title: "Diskusikan Desain",
-                desc: "Sampaikan konsep, informasi, dan kebutuhan identitasmu.",
-              },
-              {
-                n: "03",
-                title: "Konfirmasi Pesanan",
-                desc: "Periksa kembali detail desain dan pilihan produk sebelum diproses.",
-              },
-              {
-                n: "04",
-                title: "Pesanan Selesai",
-                desc: "Terima hasil desain atau kartu sesuai pesanan yang telah disepakati.",
-              },
-            ].map((step) => (
-              <article className="process-card" key={step.n}>
-                <span className="process-number">{step.n}</span>
+              ["01", "Pilih Produk", "Tentukan jenis kartu atau layanan desain yang sesuai."],
+              ["02", "Konsultasi", "Sampaikan kebutuhan, informasi, dan konsep desain."],
+              ["03", "Proses Desain", "Tim menyiapkan desain dan melakukan konfirmasi."],
+              ["04", "Penyelesaian", "Pesanan dilanjutkan setelah detail disetujui."],
+            ].map(([number, title, description]) => (
+              <div className="process-card" key={number}>
+                <span>{number}</span>
                 <div className="process-line" />
-                <h3>{step.title}</h3>
-                <p>{step.desc}</p>
-              </article>
+                <h3>{title}</h3>
+                <p>{description}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="order-section section-padding" id="order">
-        <div className="section-container order-grid">
-          <div className="order-copy">
-            <SectionLabel>05 — MULAI PESANAN</SectionLabel>
+      <section className="order section" id="order">
+        <div className="container order-grid">
+          <div className="order-intro">
+            <div className="section-label">05 — LET'S GET STARTED</div>
             <h2>
-              Punya identitas
+              Make your
               <br />
-              yang ingin <span>ditampilkan?</span>
+              <span>identity memorable.</span>
             </h2>
             <p>
-              Ceritakan kebutuhanmu kepada kami. Isi formulir berikut dan
-              lanjutkan konsultasi melalui WhatsApp.
+              Punya kebutuhan desain atau ingin memesan kartu IDQODE?
+              Sampaikan detail pesananmu melalui formulir berikut.
             </p>
-            <div className="order-contact-note">
-              <span className="contact-note-icon">↗</span>
+
+            <div className="contact-detail">
+              <span>↗</span>
               <div>
-                <strong>Terhubung langsung dengan IDQODE</strong>
-                <small>Pesanan akan diteruskan melalui WhatsApp.</small>
+                <small>WHATSAPP IDQODE</small>
+                <strong>+62 857-6256-9023</strong>
               </div>
             </div>
           </div>
 
           <form className="order-form" onSubmit={handleOrder}>
             <div className="form-heading">
-              <span>ORDER FORM / 01</span>
-              <h3>Ceritakan kebutuhanmu.</h3>
+              <strong>ORDER REQUEST</strong>
+              <span>IDQODE / 001</span>
             </div>
 
-            <label htmlFor="customer-name">Nama lengkap</label>
+            <label htmlFor="name">Nama lengkap</label>
             <input
-              id="customer-name"
-              type="text"
-              placeholder="Masukkan nama kamu"
-              value={customerName}
-              onChange={(e) => setCustomerName(e.target.value)}
+              id="name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              placeholder="Masukkan nama lengkap"
               required
             />
 
-            <label htmlFor="product-select">Produk yang diminati</label>
-            <select
-              id="product-select"
-              value={selectedProduct}
-              onChange={(e) => setSelectedProduct(e.target.value)}
-            >
-              <option>Kartu NFC</option>
-              <option>Art Carton Sharp</option>
-              <option>Art Carton Rounded</option>
-              <option>Desain Saja</option>
-            </select>
-
-            {selectedProduct.includes("Art Carton") && (
-              <div className="form-options">
-                <div>
-                  <label htmlFor="shape-select">Bentuk kartu</label>
-                  <select
-                    id="shape-select"
-                    value={shape}
-                    onChange={(e) => setShape(e.target.value)}
-                  >
-                    <option>Sharp</option>
-                    <option>Rounded</option>
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="finish-select">Finishing</label>
-                  <select
-                    id="finish-select"
-                    value={finishing}
-                    onChange={(e) => setFinishing(e.target.value)}
-                  >
-                    <option>Glossy</option>
-                    <option>Doff</option>
-                  </select>
-                </div>
-              </div>
-            )}
-
-            <label htmlFor="customer-message">Catatan / kebutuhan</label>
-            <textarea
-              id="customer-message"
-              placeholder="Ceritakan konsep atau kebutuhan kartu nama kamu..."
-              rows={4}
-              value={customerMessage}
-              onChange={(e) => setCustomerMessage(e.target.value)}
+            <label htmlFor="phone">Nomor WhatsApp</label>
+            <input
+              id="phone"
+              value={phone}
+              onChange={(event) => setPhone(event.target.value)}
+              placeholder="08xxxxxxxxxx"
             />
 
-            <button className="form-submit" type="submit">
-              Kirim melalui WhatsApp <ArrowIcon diagonal />
+            <label htmlFor="product">Pilihan produk</label>
+            <select
+              id="product"
+              value={selected}
+              onChange={(event) => setSelected(event.target.value)}
+            >
+              {products.map((product) => (
+                <option key={product.id} value={product.id}>
+                  {product.name} — {formatPrice(product.price)}
+                </option>
+              ))}
+            </select>
+
+            {(selected === "sharp" || selected === "rounded") && (
+              <>
+                <label htmlFor="finish">Finishing</label>
+                <select
+                  id="finish"
+                  value={finish}
+                  onChange={(event) => setFinish(event.target.value)}
+                >
+                  <option value="Glossy">Glossy</option>
+                  <option value="Doff">Doff</option>
+                </select>
+              </>
+            )}
+
+            <label htmlFor="notes">
+              Catatan tambahan <span>(opsional)</span>
+            </label>
+            <textarea
+              id="notes"
+              rows={3}
+              value={notes}
+              onChange={(event) => setNotes(event.target.value)}
+              placeholder="Tuliskan kebutuhan atau konsep desain..."
+            />
+
+            <div className="total-price">
+              <span>Estimasi harga produk</span>
+              <strong>{formatPrice(currentProduct.price)}</strong>
+            </div>
+
+            <button className="submit-button" type="submit">
+              Kirim Pesanan via WhatsApp <span>↗</span>
             </button>
-            <small className="form-disclaimer">
-              Dengan menekan tombol, kamu akan diarahkan ke WhatsApp IDQODE.
+
+            <small className="form-note">
+              Detail pesanan akan diteruskan melalui WhatsApp IDQODE.
             </small>
           </form>
         </div>
       </section>
 
-      <section className="team-section section-padding" id="team">
-        <div className="section-container">
+      <section className="team section" id="team">
+        <div className="container">
           <div className="section-heading">
             <div>
-              <SectionLabel>06 — DI BALIK IDQODE</SectionLabel>
+              <div className="section-label">06 — OUR TEAM</div>
               <h2>
-                Dikerjakan dengan
+                The people behind
                 <br />
-                <span>kolaborasi.</span>
+                <span>the identity.</span>
               </h2>
             </div>
             <p>
-              Setiap bagian memiliki peran dalam mendukung proses dan
-              pengembangan layanan IDQODE.
+              Setiap bagian memiliki peran dalam membangun layanan dan
+              pengalaman pelanggan IDQODE.
             </p>
           </div>
 
           <div className="team-grid">
-            {team.map((member) => (
-              <article className="team-card" key={member.number}>
-                <span className="team-number">{member.number}</span>
-                <div className="team-avatar">
-                  <span>{member.name.charAt(0)}</span>
+            {team.map(([role, member], index) => (
+              <article className="team-card" key={role}>
+                <div className="team-number">0{index + 1}</div>
+                <div className="team-initial">
+                  {member
+                    .split(" ")
+                    .slice(0, 2)
+                    .map((part) => part[0])
+                    .join("")}
                 </div>
-                <div className="team-info">
-                  <span>{member.role}</span>
-                  <h3>{member.name}</h3>
-                </div>
-                <span className="team-arrow">↗</span>
+                <div className="team-role">{role}</div>
+                <h3>{member}</h3>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="faq-section section-padding">
-        <div className="section-container faq-grid">
+      <section className="closing">
+        <div className="container closing-inner">
           <div>
-            <SectionLabel>INFORMASI TAMBAHAN</SectionLabel>
+            <div className="section-label">YOUR IDENTITY GOES DIGITAL</div>
             <h2>
-              Ada yang ingin
+              Make your first impression
               <br />
-              <span>ditanyakan?</span>
+              <span>count.</span>
             </h2>
-            <p>
-              Temukan jawaban dari beberapa pertanyaan umum seputar produk
-              dan layanan IDQODE.
-            </p>
-            <a
-              className="text-link"
-              href={`https://wa.me/${WHATSAPP_NUMBER}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Tanya langsung kepada kami <ArrowIcon diagonal />
-            </a>
           </div>
-
-          <div className="faq-list">
-            {faqs.map((faq, index) => (
-              <article className="faq-item" key={faq.question}>
-                <button
-                  className="faq-question"
-                  onClick={() =>
-                    setActiveFaq(activeFaq === index ? null : index)
-                  }
-                  aria-expanded={activeFaq === index}
-                >
-                  <span>{faq.question}</span>
-                  <span className="faq-toggle">
-                    {activeFaq === index ? "−" : "+"}
-                  </span>
-                </button>
-                {activeFaq === index && (
-                  <p className="faq-answer">{faq.answer}</p>
-                )}
-              </article>
-            ))}
-          </div>
+          <a
+            href="https://wa.me/6285762569023"
+            target="_blank"
+            rel="noreferrer"
+            className="closing-button"
+          >
+            Contact IDQODE <span>↗</span>
+          </a>
         </div>
       </section>
 
-      <footer className="site-footer">
-        <div className="section-container">
-          <div className="footer-main">
-            <div className="footer-brand">
-              <img src="/logo-idqode.png" alt="IDQODE" />
-              <p>
-                Menghadirkan identitas yang lebih praktis melalui desain
-                kreatif dan teknologi digital.
-              </p>
-              <span className="footer-tagline">
-                YOUR IDENTITY GOES DIGITAL.
-              </span>
-            </div>
-
-            <div className="footer-column">
-              <h4>Navigasi</h4>
-              <a href="#about">Tentang Kami</a>
-              <a href="#products">Produk</a>
-              <a href="#services">Layanan</a>
-              <a href="#team">Tim Kami</a>
-            </div>
-
-            <div className="footer-column">
-              <h4>Hubungi Kami</h4>
-              <a
-                href={`https://wa.me/${WHATSAPP_NUMBER}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                +62 857-6256-9023
-              </a>
-              <a href="mailto:idqode.contact@gmail.com">
-                idqode.contact@gmail.com
-              </a>
-              <a
-                href="https://instagram.com/idqode"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Instagram @idqode
-              </a>
-            </div>
-
-            <div className="footer-column footer-address">
-              <h4>Lokasi</h4>
-              <p>
-                Pademangan Timur, Kecamatan Pademangan, Jakarta Utara,
-                DKI Jakarta 14410.
-              </p>
-            </div>
+      <footer className="footer">
+        <div className="container footer-grid">
+          <div className="footer-brand">
+            <a href="#home" className="brand footer-logo">
+              IDQODE<span>.</span>
+            </a>
+            <p>
+              Your identity goes digital. Solusi identitas bisnis melalui
+              desain, QR Code, dan teknologi NFC.
+            </p>
           </div>
 
-          <div className="footer-bottom">
-            <span>© 2026 IDQODE. All rights reserved.</span>
-            <span>DESIGNED WITH PURPOSE.</span>
-            <a href="#home">Kembali ke atas ↑</a>
+          <div className="footer-column">
+            <strong>Navigation</strong>
+            <a href="#about">Tentang Kami</a>
+            <a href="#products">Produk</a>
+            <a href="#process">Cara Pesan</a>
+            <a href="#team">Tim Kami</a>
           </div>
+
+          <div className="footer-column">
+            <strong>Get in Touch</strong>
+            <a href="https://wa.me/6285762569023" target="_blank" rel="noreferrer">WhatsApp</a>
+            <a href="mailto:idqode.contact@gmail.com">Email</a>
+            <a href="https://instagram.com/idqode" target="_blank" rel="noreferrer">Instagram</a>
+          </div>
+
+          <div className="footer-column footer-location">
+            <strong>Our Location</strong>
+            <p>
+              Pademangan Timur, Kecamatan Pademangan, Jakarta Utara,
+              DKI Jakarta 14410.
+            </p>
+          </div>
+        </div>
+
+        <div className="container footer-bottom">
+          <span>© {new Date().getFullYear()} IDQODE. All rights reserved.</span>
+          <span>DESIGNED WITH PURPOSE.</span>
         </div>
       </footer>
     </main>
